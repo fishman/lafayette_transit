@@ -17,15 +17,12 @@ connect('test_database')
 URL2 = "http://lafayette.otvia.com/packet/json/allshelters"
 
 
-class BusStop(EmbeddedDocument):
+class BusStop(Document):
+    route_id = IntField()
     shelter_id = IntField()
     name = StringField()
     point = GeoPointField()
 
-
-class Route(Document):
-    route_id = IntField()
-    bus_stops = ListField(EmbeddedDocumentField(BusStop))
 
 if __name__ == "__main__":
     allshelters = urllib.urlopen(URL2)
@@ -34,21 +31,14 @@ if __name__ == "__main__":
     for shelter in shelters['ShelterArray']:
         stuff = shelter['Shelter']
 
-        stop = BusStop(shelter_id=stuff['ShelterId'], name=stuff['ShelterName'])
-
-        stop.point = [stuff['Latitude']/100000.0, -stuff['Longitude']/100000.0]
         route_ids = stuff['routeIDs']
         for i in route_ids:
-            routes = Route.objects(route_id=i)
-            if len(routes) > 0:
-                route = routes[0]
-            else:
-                route = Route(route_id=i)
+            stop = BusStop(shelter_id=stuff['ShelterId'], name=stuff['ShelterName'])
+            stop.point = [stuff['Latitude']/100000.0, -stuff['Longitude']/100000.0]
+            stop.route_id = i
+            stop.save()
 
-            route.bus_stops.append(stop)
-            route.save()
-
-    print Route.objects
+    print BusStop.objects
 
     # for shelter in shelters['ShelterArray']:
     #     stuff = shelter['Shelter']
