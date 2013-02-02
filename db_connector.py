@@ -20,8 +20,7 @@ URL2 = "http://lafayette.otvia.com/packet/json/allshelters"
 class BusStop(EmbeddedDocument):
     shelter_id = IntField()
     name = StringField()
-    latitude = IntField()
-    longitude = IntField()
+    point = GeoPointField()
 
 
 class Route(Document):
@@ -35,11 +34,9 @@ if __name__ == "__main__":
     for shelter in shelters['ShelterArray']:
         stuff = shelter['Shelter']
 
-        stop = BusStop(shelter_id=stuff['ShelterId'],
-                    name=stuff['ShelterName'],
-                    latitude=stuff['Latitude']/100000.0,
-                    longitude=-stuff['Longitude']/100000.0)
+        stop = BusStop(shelter_id=stuff['ShelterId'], name=stuff['ShelterName'])
 
+        stop.point = [stuff['Latitude']/100000.0, -stuff['Longitude']/100000.0]
         route_ids = stuff['routeIDs']
         for i in route_ids:
             routes = Route.objects(route_id=i)
