@@ -15,9 +15,16 @@ import yaml
 connect('test_database')
 
 URL2 = "http://lafayette.otvia.com/packet/json/allshelters"
+allshelters = urllib.urlopen(URL2)
+shelters = yaml.load(allshelters)
+
+# URL2 = "http://lafayette.otvia.com/packet/json/route"
+# allroutes = urllib.urlopen(URL2)
+# routes = yaml.load(allroutes)
 
 
 class BusStop(Document):
+    # kml_id
     route_id = IntField()
     shelter_id = IntField()
     name = StringField()
@@ -39,19 +46,3 @@ if __name__ == "__main__":
             stop.save()
 
     print BusStop.objects
-
-    # for shelter in shelters['ShelterArray']:
-    #     stuff = shelter['Shelter']
-    #     sh = {"shelter_id": stuff['ShelterId'],
-    #             "name": stuff['ShelterName'],
-    #             "latitude": stuff['Latitude']/100000.0,
-    #             "longitude": -stuff['Longitude']/100000.0}
-
-    #     # print sh
-    #     shelters_model.insert(sh)
-    #     route_ids = stuff['routeIDs']
-
-    #     for i in route_ids:
-
-
-    #         print i
