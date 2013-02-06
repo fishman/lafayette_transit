@@ -7,12 +7,13 @@
 {% block js_footer %}
 <script type="text/javascript" charset="utf-8">
 $(function() {
-  var map = L.map('map').setView([51.505, -0.09], 13);
+  var map = L.map('map').setView([30.21862, -92.01512], 13);
   L.tileLayer('http://{s}.tile.cloudmade.com/{{ config.LEAFLET_API }}/997/256/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
       maxZoom: 18
   }).addTo(map);
 
+  map.locate({setView : true});
 });
 </script>
 {% endblock %}
