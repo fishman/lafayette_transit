@@ -1,17 +1,20 @@
 {% extends "base.html" %}
+
 {% block content %}
   <div id="map"></div>
+{% endblock %}
 
-  <script type="text/javascript" charset="utf-8">
-    $(function() {
-      var map = L.map('map').setView([51.505, -0.09], 13);
-      L.tileLayer('http://{s}.tile.cloudmade.com/{{ config.LEAFLET_API }}/997/256/{z}/{x}/{y}.png', {
-          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-          maxZoom: 18
-      }).addTo(map);
+{% block js_footer %}
+<script type="text/javascript" charset="utf-8">
+$(function() {
+  var map = L.map('map').setView([51.505, -0.09], 13);
+  L.tileLayer('http://{s}.tile.cloudmade.com/{{ config.LEAFLET_API }}/997/256/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+      maxZoom: 18
+  }).addTo(map);
 
-    });
-  </script>
+});
+</script>
 {% endblock %}
 {% block css %}
   <link rel="stylesheet" href="/static/css/reset-min.css" />
