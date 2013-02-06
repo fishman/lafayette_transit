@@ -7,13 +7,33 @@
 {% block js_footer %}
 <script type="text/javascript" charset="utf-8">
 $(function() {
-  var map = L.map('map').setView([30.21862, -92.01512], 13);
+  map = L.map('map').setView([30.21862, -92.01512], 13);
   L.tileLayer('http://{s}.tile.cloudmade.com/{{ config.LEAFLET_API }}/997/256/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
       maxZoom: 18
   }).addTo(map);
 
-  map.locate({setView : true});
+  function onLocationfound(e){
+      map.setView(e.latlng, 17);
+  }
+
+  map.locate({setView : false});
+  map.on('locationfound', onLocationfound);
+  var basicIcon = L.Icon.extend({
+          iconUrl: '/images/bus-24.png',
+          shadowUrl: null,
+          iconSize: new L.Point(24, 24),
+          shadowSize: null,
+          iconAnchor: new L.Point(12, 12),
+          popupAnchor: new L.Point(1, 0)
+  });
+  map.whenReady(function(){
+      {% for bus_stop in bus_stops %}
+      var marker = new L.Marker(new L.LatLng({{ bus_stop.point[0] }}, {{bus_stop.point[1]}}));
+      marker.bindPopup('{{ bus_stop.name }}');
+      map.addLayer(marker);
+      {% endfor %}
+  });
 });
 </script>
 {% endblock %}
